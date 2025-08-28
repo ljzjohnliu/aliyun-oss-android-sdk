@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="bucketregion">
-        <item>杭州</item>
-        <item>青岛</item>
-        <item>北京</item>
-        <item>上海</item>
-        <item>深圳</item>
-        <item>美国</item>
+        <item>@string/hangzhou</item>
+        <item>@string/qingdao</item>
+        <item>@string/beijing</item>
+        <item>@string/shanghai</item>
+        <item>@string/shenzhen</item>
+        <item>@string/America</item>
     </string-array>
 </resources>

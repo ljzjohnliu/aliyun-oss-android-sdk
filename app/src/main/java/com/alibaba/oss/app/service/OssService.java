@@ -99,7 +99,7 @@ public class OssService {
                 Log.d("GetObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
                 mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("下载进度: " + String.valueOf(progress) + "%");
+                mDisplayer.displayInfo("download progress: " + String.valueOf(progress) + "%");
             }
         });
         OSSLog.logDebug("asyncGetObject");
@@ -183,7 +183,7 @@ public class OssService {
                 Log.d("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
                 mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+                mDisplayer.displayInfo("upload progress: " + String.valueOf(progress) + "%");
             }
         });
 
@@ -314,7 +314,7 @@ public class OssService {
                 OSSLog.logDebug("[testMultipartUpload] - " + currentSize + " " + totalSize, false);
                 int progress = (int) (100 * currentSize / totalSize);
                 mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+                mDisplayer.displayInfo("upload progress: " + String.valueOf(progress) + "%");
             }
         });
         mOss.asyncMultipartUpload(request, new OSSCompletedCallback<MultipartUploadRequest, CompleteMultipartUploadResult>() {
@@ -344,7 +344,7 @@ public class OssService {
                 Log.d("GetObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
                 mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+                mDisplayer.displayInfo("upload progress: " + String.valueOf(progress) + "%");
             }
         });
         OSSAsyncTask task = mOss.asyncResumableUpload(request, new OSSCompletedCallback<ResumableUploadRequest, ResumableUploadResult>() {
@@ -383,7 +383,7 @@ public class OssService {
                 }
                 int progress = (int) (100 * currentSize / totalSize);
                 mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("上传进度: " + String.valueOf(progress) + "%");
+                mDisplayer.displayInfo("upload progress: " + String.valueOf(progress) + "%");
             }
         });
         final long start = System.currentTimeMillis();
@@ -545,13 +545,13 @@ public class OssService {
                 Log.d("GetObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
                 int progress = (int) (100 * currentSize / totalSize);
                 mDisplayer.updateProgress(progress);
-                mDisplayer.displayInfo("下载进度: " + String.valueOf(progress) + "%");
+                mDisplayer.displayInfo("download progress: " + String.valueOf(progress) + "%");
             }
         });
         OSSAsyncTask task = mOss.asyncGetObject(get, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
             @Override
             public void onSuccess(GetObjectRequest request, GetObjectResult result) {
-                mDisplayer.displayInfo("使用自签名获取网络对象成功！");
+                mDisplayer.displayInfo("Successfully obtained network object using self signature!");
             }
 
             @Override

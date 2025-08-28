@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">app</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="sts_input_tip">请先设置正确的STS鉴权服务器地址，否则以下服务无法直接使用。</string>
+    <string name="sts_title">STS鉴权服务器:</string>
+    <string name="bucket_title">上传Bucket:</string>
+    <string name="region_title">区域:</string>
+    <string name="set_text">设置</string>
+    <string name="select">选择图片</string>
+    <string name="object_name">请输入OSS文件名</string>
+    <string name="normal">普通上传下载</string>
+    <string name="download">下载</string>
+    <string name="upload">上传</string>
+    <string name="multipart_upload"> 上传</string>
+    <string name="multipart_pause">暂停</string>
+    <string name="multipart">断点续传上传</string>
+    <string name="resize_width">缩略宽度</string>
+    <string name="resize_height">缩略高度</string>
+    <string name="resize">图片缩略</string>
+    <string name="watermark">文字水印</string>
+    <string name="watermark_hint">请输入水印文字</string>
+    <string name="watermark_size">文字大小</string>
+    <string name="stsserver">STS服务器地址</string>
+    <string name="listObjects">listObjects</string>
+    <string name="headObject">headObject</string>
+    <string name="manageBuckets">manage</string>
+    <string name="ossSign">ossSign</string>
+    <string name="resumableUpload">resumable</string>
+    <string name="multipartDownload">resumableDownload</string>
+    <string name="multipartUpload">multipart</string>
+    <string name="cutomSign">cutomsign</string>
+    <string name="batch_upload">batch</string>
+    <string name="trigger_callback">callback</string>
+    <string name="image_persist">image persist</string>
+
+    <string name="hangzhou">杭州</string>
+    <string name="qingdao">青岛</string>
+    <string name="beijing">北京</string>
+    <string name="shanghai">上海</string>
+    <string name="shenzhen">深圳</string>
+    <string name="America">美国</string>
+</resources>

@@ -56,21 +56,21 @@ public class UIDisplayer {
 
 
                     case UPLOAD_OK:
-                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("上传成功").setMessage("upload to OSS OK!").show();
+                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("upload success").setMessage("upload to OSS OK!").show();
                         break;
                     case UPLOAD_FAIL:
                         info = (String) inputMessage.obj;
-                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("上传失败").setMessage(info).show();
+                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("upload fail").setMessage(info).show();
                         break;
                     case DOWNLOAD_OK:
-                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("下载成功").setMessage("download from OSS OK!").show();
+                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("download success").setMessage("download from OSS OK!").show();
                         break;
                     case SETTING_OK:
-                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("设置成功").setMessage("设置域名信息成功,现在<选择图片>, 然后上传图片").show();
+                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("set success").setMessage("Successfully set domain information, now<select>, and then upload the image").show();
                         break;
                     case DOWNLOAD_FAIL:
                         info = (String) inputMessage.obj;
-                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("下载失败").setMessage(info).show();
+                        new AlertDialog.Builder(UIDisplayer.this.activity).setTitle("download fail").setMessage(info).show();
                         break;
                     case UPDATE_PROGRESS:
                         UIDisplayer.this.bar.setProgress(inputMessage.arg1);

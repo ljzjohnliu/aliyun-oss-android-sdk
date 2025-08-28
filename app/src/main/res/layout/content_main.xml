@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="请先设置正确的STS鉴权服务器地址，否则以下服务无法直接使用。"
+            android:text="@string/sts_input_tip"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="11sp" />
 
@@ -28,9 +28,9 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="85dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="STS鉴权服务器:"
+                android:text="@string/sts_title"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="11sp" />
 
@@ -51,9 +51,9 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="上传Bucket:"
+                android:text="@string/bucket_title"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="11sp" />
 
@@ -66,15 +66,15 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="30dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" 区域:"
+                android:text="@string/region_title"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="11sp" />
 
             <Spinner
                 android:id="@+id/region"
-                android:layout_width="94dp"
+                android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:entries="@array/bucketregion" />
 
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="设置" />
+                android:text="@string/set_text" />
         </LinearLayout>
 
         <ImageView

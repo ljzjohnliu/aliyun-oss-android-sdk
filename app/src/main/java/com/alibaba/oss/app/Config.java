@@ -21,7 +21,7 @@ public class Config {
     // 或者根据工程sts_local_server目录中本地鉴权服务脚本代码启动本地STS 鉴权服务器。详情参见sts_local_server 中的脚本内容。
     public static final String STS_SERVER_URL = "http://*.*.*.*:*/sts/getsts";//STS 地址
 
-    public static final String BUCKET_NAME = "请输入bucket名称";
+    public static final String BUCKET_NAME = "bucket name";
     public static final String OSS_ACCESS_KEY_ID = "*************";
     public static final String OSS_ACCESS_KEY_SECRET = "*************";
 
