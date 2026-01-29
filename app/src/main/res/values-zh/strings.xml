@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">app</string>
+    <string name="app_name">阿里云Demo</string>
     <string name="action_settings">Settings</string>
 
     <string name="sts_input_tip">请先设置正确的STS鉴权服务器地址，否则以下服务无法直接使用。</string>
