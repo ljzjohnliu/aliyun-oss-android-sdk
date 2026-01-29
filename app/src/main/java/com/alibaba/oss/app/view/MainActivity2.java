@@ -2,13 +2,11 @@ package com.alibaba.oss.app.view;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.oss.R;
@@ -41,16 +38,10 @@ public class MainActivity2 extends AppCompatActivity {
     //OSS的上传下载
     private MyOssService mService;
 
-    TextView videoDomainTokenTxt;
-    TextView imgDomainTokenTxt;
     Switch partSwitch;
     EditText filePathEdt;
     EditText sliceSizeEdt;
 
-    private String videoUploadToken;
-    private String videoDomain;
-    private String imgUploadToken;
-    private String imgDomain;
     private long uploadLastTimePoint;
     private long uploadLastOffset;
     private long uploadFileLength;
@@ -93,7 +84,6 @@ public class MainActivity2 extends AppCompatActivity {
         sp.setOnItemSelectedListener(new MySelectedListener());
     }
 
-
     public MyOssService initOSS(String endpoint, String bucket) {
 
 //        移动端是不安全环境，不建议直接使用阿里云主账号ak，sk的方式。建议使用STS方式。具体参
@@ -114,6 +104,7 @@ public class MainActivity2 extends AppCompatActivity {
         String SK = "******";
         credentialProvider = new OSSPlainTextAKSKCredentialProvider(AK,SK);
 
+//        credentialProvider = new OSSAuthCredentialsProvider(Config.STS_SERVER_URL);
 
         //使用自己的获取STSToken的类
 //        String stsServer = ((EditText) findViewById(R.id.stsserver)).getText().toString();
@@ -124,11 +115,6 @@ public class MainActivity2 extends AppCompatActivity {
 //            credentialProvider = new OSSAuthCredentialsProvider(stsServer);
 //        }
 
-//        String editBucketName = ((EditText) findViewById(R.id.bucketname)).getText().toString();
-//        if (TextUtils.isEmpty(editBucketName)) {
-//            editBucketName = bucket;
-//            ((EditText) findViewById(R.id.bucketname)).setText(bucket);
-//        }
         ClientConfiguration conf = new ClientConfiguration();
         conf.setConnectionTimeout(15 * 1000); // 连接超时，默认15秒
         conf.setSocketTimeout(15 * 1000); // socket超时，默认15秒
@@ -145,8 +131,6 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         context = this;
-        videoDomainTokenTxt = (TextView) findViewById(R.id.video_domain);
-        imgDomainTokenTxt = (TextView) findViewById(R.id.img_domain);
         partSwitch = (Switch) findViewById(R.id.switch_part);
         filePathEdt = (EditText) findViewById(R.id.file_path);
         sliceSizeEdt = (EditText) findViewById(R.id.slice_size);
@@ -203,19 +187,6 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    public void getVideoTokenDomain(View view) {
-//        getTokenAndDomain(true);
-        startActivity(new Intent(MainActivity2.this, MainActivity.class));
-    }
-
-    public void getImgTokenDomain(View view) {
-        getTokenAndDomain(false);
-    }
-
-    public void getTokenAndDomain(final boolean isVideo) {
-
-    }
-
     public void videoUpload(View view) {
         boolean isSingleFile = true;
         if (!isSingleFile) {
@@ -225,21 +196,25 @@ public class MainActivity2 extends AppCompatActivity {
                 return;
             }
             for (int i = 0; i < filePaths.length; i++) {
-                Log.d(TAG, "MainActivity2, videoUpload: uploadFilePath = " + uploadFilePath + ", filePaths[" + i + "] = " + filePaths[i]);
+                File file = new File(filePaths[i]);
+                String fileName = file.getName();
+                Log.d(TAG, "MainActivity2, videoUpload: uploadFilePath = " + uploadFilePath + ", filePaths[" + i + "] = " + filePaths[i] + "， fileName = " + fileName);
                 if (partSwitch.isChecked()) {
-                    mService.asyncMultipartUpload(filePaths[i], filePaths[i]);
+                    mService.asyncMultipartUpload(fileName, filePaths[i]);
                 } else {
-                    mService.asyncPutObject(filePaths[i], filePaths[i]);
+                    mService.asyncPutObject(fileName, filePaths[i]);
                 }
             }
         } else {
             uploadFilePath = filePathEdt.getText().toString();
             uploadFilePath = "/mnt/sdcard/test_gif.gif";
-            Log.d(TAG, "MainActivity2, videoUpload: uploadFilePath = " + uploadFilePath);
+            File file = new File(uploadFilePath);
+            String fileName = file.getName();
+            Log.d(TAG, "MainActivity2, videoUpload: uploadFilePath = " + uploadFilePath + "， fileName = " + fileName);
             if (partSwitch.isChecked()) {
-                mService.asyncMultipartUpload(uploadFilePath, uploadFilePath);
+                mService.asyncMultipartUpload(fileName, uploadFilePath);
             } else {
-                mService.asyncPutObject(uploadFilePath, uploadFilePath);
+                mService.asyncPutObject(fileName, uploadFilePath);
             }
         }
     }
@@ -253,21 +228,25 @@ public class MainActivity2 extends AppCompatActivity {
                 return;
             }
             for (int i = 0; i < filePaths.length; i++) {
-                Log.d(TAG, "MainActivity2, picUpload: uploadFilePath = " + uploadFilePath + ", filePaths[" + i + "] = " + filePaths[i]);
+                File file = new File(filePaths[i]);
+                String fileName = file.getName();
+                Log.d(TAG, "MainActivity2, picUpload: uploadFilePath = " + uploadFilePath + ", filePaths[" + i + "] = " + filePaths[i] + "， fileName = " + fileName);
                 if (partSwitch.isChecked()) {
-                    mService.asyncMultipartUpload(filePaths[i], filePaths[i]);
+                    mService.asyncMultipartUpload(fileName, filePaths[i]);
                 } else {
-                    mService.asyncPutObject(filePaths[i], filePaths[i]);
+                    mService.asyncPutObject(fileName, filePaths[i]);
                 }
             }
         } else {
             uploadFilePath = filePathEdt.getText().toString();
             uploadFilePath = "/mnt/sdcard/test_gif.gif";
-            Log.d(TAG, "MainActivity2, picUpload: uploadFilePath = " + uploadFilePath);
+            File file = new File(uploadFilePath);
+            String fileName = file.getName();
+            Log.d(TAG, "MainActivity2, picUpload: uploadFilePath = " + uploadFilePath + "， fileName = " + fileName);
             if (partSwitch.isChecked()) {
-                mService.asyncMultipartUpload(uploadFilePath, uploadFilePath);
+                mService.asyncMultipartUpload(fileName, uploadFilePath);
             } else {
-                mService.asyncPutObject(uploadFilePath, uploadFilePath);
+                mService.asyncPutObject(fileName, uploadFilePath);
             }
         }
     }

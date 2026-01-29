@@ -6,57 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".app.view.MainActivity2">
 
-    <Button
-        android:id="@+id/get_video_service"
-        android:layout_width="0dp"
+    <EditText
+        android:id="@+id/sts_edt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="getVideoTokenDomain"
-        android:text="获取视频的uploadToken和domain"
+        android:layout_marginEnd="8dp"
+        android:hint="STS 或 AKSK"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/video_domain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="上传前需获取视频token和domain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/get_video_service" />
-
-    <Button
-        android:id="@+id/get_img_service"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="getImgTokenDomain"
-        android:text="获取图片的uploadToken和domain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/video_domain" />
-
-    <TextView
-        android:id="@+id/img_domain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="上传前需获取图片token和domain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/get_img_service" />
 
     <EditText
         android:id="@+id/file_path"
@@ -70,11 +31,11 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_domain" />
+        app:layout_constraintTop_toBottomOf="@+id/sts_edt" />
 
     <Spinner
         android:id="@+id/file_size_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
