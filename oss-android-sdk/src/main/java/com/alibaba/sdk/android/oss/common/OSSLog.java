@@ -7,7 +7,7 @@ import android.util.Log;
  */
 public class OSSLog {
 
-    private static final String TAG = "OSS-Android-SDK";
+    private static final String TAG = "OSS-SDK";
     private static boolean enableLog = false;
 
     private static LogPrinter logPrinter = new DefaultLogPrinter();
