@@ -12,6 +12,8 @@ import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.CompleteMultipartUploadResult;
 import com.alibaba.sdk.android.oss.model.MultipartUploadRequest;
+import com.alibaba.sdk.android.oss.model.OSSRequest;
+import com.alibaba.sdk.android.oss.model.OSSResult;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 
@@ -26,6 +28,7 @@ public class MyOssService {
     private static final String TAG = "OssService";
     public OSS mOss;
     private String mBucket;
+    private PutFileCallBack mPutFileCallBack;
 
     public MyOssService(OSS oss, String bucket) {
         this.mOss = oss;
@@ -40,9 +43,15 @@ public class MyOssService {
         this.mOss = _oss;
     }
 
-    public void asyncPutObject(String object, String localFile) {
+    public interface PutFileCallBack {
+        void onResult(OSSRequest request, OSSResult putObjectResult, long costTime);
+        void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException);
+    }
+
+    public void asyncPutObject(String object, String localFile, final PutFileCallBack putFileCallBack) {
         final long upload_start = System.currentTimeMillis();
-        OSSLog.logDebug("upload start");
+        OSSLog.logDebug("upload start upload_start = " + upload_start);
+        Log.d(TAG, "asyncPutObject: upload start ====================== localFile = " + localFile + ", upload_start = " + upload_start);
 
         if (object.equals("")) {
             Log.w(TAG,"asyncPutObject object is Null");
@@ -73,10 +82,12 @@ public class MyOssService {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                 Log.d(TAG, "PutObject, UploadSuccess ETag = " + result.getETag() + ", RequestId = " + result.getRequestId());
-
-                long upload_end = System.currentTimeMillis();
-                Log.d(TAG,"upload cost: " + (upload_end - upload_start) / 1000f);
-                Log.d("PutObject", "Bucket: " + mBucket
+                long cost = (System.currentTimeMillis() - upload_start);
+                Log.d(TAG,"asyncPutObject upload cost: " + cost + ", currentThread = " + Thread.currentThread());
+                if (putFileCallBack != null) {
+                    putFileCallBack.onResult(request, result, cost);
+                }
+                Log.d(TAG, "asyncPutObject PutObject Bucket: " + mBucket
                         + "\nObject: " + request.getObjectKey()
                         + "\nETag: " + result.getETag()
                         + "\nRequestId: " + result.getRequestId()
@@ -84,12 +95,15 @@ public class MyOssService {
             }
 
             @Override
-            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+            public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
+                if (putFileCallBack != null) {
+                    putFileCallBack.onFailure(request, clientException, serviceException);
+                }
                 // 请求异常
-                if (clientExcepion != null) {
+                if (clientException != null) {
                     // 本地异常如网络异常等
-                    clientExcepion.printStackTrace();
-                    Log.d(TAG, "onFailure: clientExcepion = " + clientExcepion);
+                    clientException.printStackTrace();
+                    Log.d(TAG, "onFailure: clientExcepion = " + clientException);
                 }
                 if (serviceException != null) {
                     // 服务异常
@@ -100,7 +114,7 @@ public class MyOssService {
         });
     }
 
-    public void asyncMultipartUpload(String uploadKey, String uploadFilePath) {
+    public void asyncMultipartUpload(String uploadKey, String uploadFilePath, final PutFileCallBack putFileCallBack) {
         final long upload_start = System.currentTimeMillis();
         MultipartUploadRequest request = new MultipartUploadRequest(mBucket, uploadKey, uploadFilePath);
         // 设置PartSize。PartSize默认值为256 KB，最小值为100 KB。
@@ -117,13 +131,24 @@ public class MyOssService {
             @Override
             public void onSuccess(MultipartUploadRequest request, CompleteMultipartUploadResult result) {
                 Log.d(TAG, "asyncMultipartUpload, onSuccess: result = " + result);
-                long upload_end = System.currentTimeMillis();
-                Log.d(TAG,"asyncMultipartUpload, upload cost: " + (upload_end - upload_start) / 1000f);
+                long cost = (System.currentTimeMillis() - upload_start);
+                Log.d(TAG,"asyncMultipartUpload, upload cost: " + cost);
+                if (putFileCallBack != null) {
+                    putFileCallBack.onResult(request, result, cost);
+                }
+                Log.d(TAG, "asyncMultipartUpload PutObject Bucket: " + mBucket
+                        + "\nObject: " + request.getObjectKey()
+                        + "\nETag: " + result.getETag()
+                        + "\nRequestId: " + result.getRequestId()
+                        + "\nCallback: " + result.getServerCallbackReturnBody());
             }
 
             @Override
             public void onFailure(MultipartUploadRequest request, ClientException clientException, ServiceException serviceException) {
                 Log.d(TAG, "onFailure: clientException = " + clientException + ", serviceException = " + serviceException);
+                if (putFileCallBack != null) {
+                    putFileCallBack.onFailure(request, clientException, serviceException);
+                }
             }
         });
     }

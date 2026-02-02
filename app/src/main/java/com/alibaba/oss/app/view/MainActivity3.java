@@ -26,18 +26,15 @@ import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.common.OSSLog;
-import com.alibaba.sdk.android.oss.common.auth.OSSAuthCredentialsProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
 import com.alibaba.sdk.android.oss.model.OSSRequest;
 import com.alibaba.sdk.android.oss.model.OSSResult;
-import com.alibaba.sdk.android.oss.model.PutObjectRequest;
-import com.alibaba.sdk.android.oss.model.PutObjectResult;
 
 import java.io.File;
 import java.util.Arrays;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity3 extends AppCompatActivity {
     public static String TAG = "MainActivity";
     private static Context context;
     private final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1000;
@@ -80,7 +77,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            Toast.makeText(MainActivity2.this, "您选择的是：" + fileSizeArray[i], Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity3.this, "您选择的是：" + fileSizeArray[i], Toast.LENGTH_SHORT).show();
             fileSizeType = fileSizeArray[i];
 //            updateResult(fileSizeType);
 
@@ -214,59 +211,6 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-
-    public void executeTaskByOrder(final boolean isVideo, final String[] filePaths, int position) {
-        if (position >= filePaths.length)
-            return;
-        String uploadFilePath = filePaths[position];
-        File file = new File(uploadFilePath);
-        String fileName = file.getName();
-        final int nextPos = position + 1;
-        Log.d(TAG, "executeTaskByOrder: position = " + position + ", uploadFilePath = " + uploadFilePath + "， fileName = " + fileName + ", nextPos = " + nextPos);
-        if (partSwitch.isChecked()) {
-            mService.asyncMultipartUpload(fileName, uploadFilePath, new MyOssService.PutFileCallBack() {
-                @Override
-                public void onResult(OSSRequest request, OSSResult putObjectResult, long costTime) {
-                    sucCount++;
-                    totalCostTime += costTime;
-                    long averageCost = totalCostTime / sucCount;
-                    Log.d(TAG, "executeTaskByOrder: 分片 onResult request = " + request + "，putObjectResult = " + putObjectResult + "，costTime = " + costTime);
-                    Log.d(TAG, "executeTaskByOrder 分片 onResult: costTime = " + costTime + ", sucCount = " + sucCount + ", totalCostTime = " + totalCostTime + ", averageCost = " + averageCost + ", totalCount = " + totalCount);
-                    updateResult((isVideo ? "视频":"图片") + fileSizeType, averageCost, sucCount, totalCount);
-                    executeTaskByOrder(isVideo, filePaths, nextPos);
-                }
-
-                @Override
-                public void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException) {
-                    Log.d(TAG, "executeTaskByOrder 分片 onFailure request = " + request + "，clientException = " + clientException + "，serviceException = " + serviceException);
-                    updateResult((isVideo ? "视频":"图片") + fileSizeType, totalCostTime / sucCount, sucCount, totalCount);
-                    executeTaskByOrder(isVideo, filePaths, nextPos);
-                }
-            });
-        } else {
-            mService.asyncPutObject(fileName, uploadFilePath, new MyOssService.PutFileCallBack() {
-                @Override
-                public void onResult(OSSRequest request, OSSResult putObjectResult, long costTime) {
-                    sucCount++;
-                    totalCostTime += costTime;
-                    long averageCost = totalCostTime / sucCount;
-//                            Log.d(TAG, "executeTaskByOrder: 直传 onResult request = " + request + "，putObjectResult = " + putObjectResult + "，costTime = " + costTime);
-                    Log.d(TAG, "executeTaskByOrder 直传 onResult: costTime = " + costTime + ", sucCount = " + sucCount + ", totalCostTime = " + totalCostTime + ", averageCost = " + averageCost + ", totalCount = " + totalCount);
-                    updateResult((isVideo ? "视频":"图片") + fileSizeType, averageCost, sucCount, totalCount);
-                    executeTaskByOrder(isVideo, filePaths, nextPos);
-                }
-
-                @Override
-                public void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException) {
-                    Log.d(TAG, "executeTaskByOrder: 直传 onResult request = " + request + "，clientException = " + clientException
-                            + "，serviceException = " + serviceException);
-                    updateResult((isVideo ? "视频":"图片") + fileSizeType, totalCostTime / sucCount, sucCount, totalCount);
-                    executeTaskByOrder(isVideo, filePaths, nextPos);
-                }
-            });
-        }
-    }
-
     public void videoUpload(View view) {
         sucCount = 0;
         totalCount = videoFilePaths.length;
@@ -275,11 +219,51 @@ public class MainActivity2 extends AppCompatActivity {
         boolean isSingleFile = false;
         if (!isSingleFile) {
             String[] filePaths = videoFilePaths;
-            if (filePaths == null || filePaths.length == 0) {
-                Toast.makeText(MainActivity2.this, "Picture filePaths is null!", Toast.LENGTH_SHORT).show();
+            if (filePaths == null) {
+                Toast.makeText(MainActivity3.this, "Picture filePaths is null!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            executeTaskByOrder(true, filePaths, 0);
+            for (int i = 0; i < filePaths.length; i++) {
+                File file = new File(filePaths[i]);
+                String fileName = file.getName();
+                Log.d(TAG, "videoUpload: uploadFilePath = " + uploadFilePath + ", filePaths[" + i + "] = " + filePaths[i] + "， fileName = " + fileName);
+                if (partSwitch.isChecked()) {
+                    mService.asyncMultipartUpload(fileName, filePaths[i], new MyOssService.PutFileCallBack() {
+                        @Override
+                        public void onResult(OSSRequest request, OSSResult putObjectResult, long costTime) {
+                            sucCount++;
+                            totalCostTime += costTime;
+                            long averageCost = totalCostTime / sucCount;
+                            Log.d(TAG, "videoUpload: 多视频分片 onResult request = " + request + "，putObjectResult = " + putObjectResult + "，costTime = " + costTime);
+                            Log.d(TAG, "videoUpload onResult: costTime = " + costTime + ", sucCount = " + sucCount + ", totalCostTime = " + totalCostTime + ", averageCost = " + averageCost + ", totalCount = " + totalCount);
+                            updateResult("视频" + fileSizeType, averageCost, sucCount, totalCount);
+                        }
+
+                        @Override
+                        public void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException) {
+                            Log.d(TAG, "videoUpload: 多视频分片 onFailure request = " + request + "，clientException = " + clientException + "，serviceException = " + serviceException);
+                        }
+                    });
+                } else {
+                    mService.asyncPutObject(fileName, filePaths[i], new MyOssService.PutFileCallBack() {
+                        @Override
+                        public void onResult(OSSRequest request, OSSResult putObjectResult, long costTime) {
+                            sucCount++;
+                            totalCostTime += costTime;
+                            long averageCost = totalCostTime / sucCount;
+//                            Log.d(TAG, "videoUpload: 多视频直传 onResult request = " + request + "，putObjectResult = " + putObjectResult + "，costTime = " + costTime);
+                            Log.d(TAG, "videoUpload onResult: costTime = " + costTime + ", sucCount = " + sucCount + ", totalCostTime = " + totalCostTime + ", averageCost = " + averageCost + ", totalCount = " + totalCount);
+                            updateResult("视频" + fileSizeType, averageCost, sucCount, totalCount);
+                        }
+
+                        @Override
+                        public void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException) {
+                            Log.d(TAG, "videoUpload: 多视频直传 onResult request = " + request + "，clientException = " + clientException
+                                    + "，serviceException = " + serviceException);
+                        }
+                    });
+                }
+            }
         } else {
             uploadFilePath = filePathEdt.getText().toString();
             uploadFilePath = "/mnt/sdcard/test_video1.mp4";
@@ -319,14 +303,55 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public void picUpload(View view) {
-        boolean isSingleFile = false;
+        boolean isSingleFile = true;
         if (!isSingleFile) {
             String[] filePaths = picFilePaths;
-            if (filePaths == null || filePaths.length == 0) {
-                Toast.makeText(MainActivity2.this, "Picture filePaths is null!", Toast.LENGTH_SHORT).show();
+            if (filePaths == null) {
+                Toast.makeText(MainActivity3.this, "Picture filePaths is null!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            executeTaskByOrder(false, filePaths, 0);
+            for (int i = 0; i < filePaths.length; i++) {
+                File file = new File(filePaths[i]);
+                String fileName = file.getName();
+                Log.d(TAG, "picUpload: uploadFilePath = " + uploadFilePath + ", filePaths[" + i + "] = " + filePaths[i] + "， fileName = " + fileName);
+                if (partSwitch.isChecked()) {
+                    mService.asyncMultipartUpload(fileName, filePaths[i], new MyOssService.PutFileCallBack() {
+                        @Override
+                        public void onResult(OSSRequest request, OSSResult putObjectResult, long costTime) {
+                            sucCount++;
+                            totalCostTime += costTime;
+                            long averageCost = totalCostTime / sucCount;
+                            Log.d(TAG, "picUpload: 多图分片 onResult request = " + request + "，putObjectResult = " + putObjectResult + "，costTime = " + costTime);
+                            Log.d(TAG, "picUpload onResult: costTime = " + costTime + ", sucCount = " + sucCount + ", totalCostTime = " + totalCostTime + ", averageCost = " + averageCost + ", totalCount = " + totalCount);
+                            updateResult("图片" + fileSizeType, averageCost, sucCount, totalCount);
+                        }
+
+                        @Override
+                        public void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException) {
+                            Log.d(TAG, "picUpload: 多图分片 onFailure request = " + request + "，clientException = " + clientException
+                                    + "，serviceException = " + serviceException);
+                        }
+                    });
+                } else {
+                    mService.asyncPutObject(fileName, filePaths[i], new MyOssService.PutFileCallBack() {
+                        @Override
+                        public void onResult(OSSRequest request, OSSResult putObjectResult, long costTime) {
+                            sucCount++;
+                            totalCostTime += costTime;
+                            long averageCost = totalCostTime / sucCount;
+                            Log.d(TAG, "picUpload: 多图直传 onResult request = " + request + "，putObjectResult = " + putObjectResult + "，costTime = " + costTime);
+                            Log.d(TAG, "picUpload onResult: costTime = " + costTime + ", sucCount = " + sucCount + ", totalCostTime = " + totalCostTime + ", averageCost = " + averageCost + ", totalCount = " + totalCount);
+                            updateResult("图片" + fileSizeType, averageCost, sucCount, totalCount);
+                        }
+
+                        @Override
+                        public void onFailure(OSSRequest request, ClientException clientException, ServiceException serviceException) {
+                            Log.d(TAG, "picUpload: 多图直传 onResult request = " + request + "，clientException = " + clientException
+                                    + "，serviceException = " + serviceException);
+                        }
+                    });
+                }
+            }
         } else {
             uploadFilePath = filePathEdt.getText().toString();
             uploadFilePath = "/mnt/sdcard/test_gif.gif";
