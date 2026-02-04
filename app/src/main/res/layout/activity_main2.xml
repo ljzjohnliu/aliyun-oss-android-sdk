@@ -56,6 +56,7 @@
         android:ems="10"
         android:hint="上传次数"
         android:inputType="number"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/file_size_spinner"
         app:layout_constraintTop_toBottomOf="@+id/file_path" />
@@ -70,7 +71,7 @@
         android:textSize="18sp"
         android:text="是否分片上传"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upload_count" />
+        app:layout_constraintTop_toBottomOf="@+id/file_size_spinner" />
 
     <Switch
         android:id="@+id/switch_part"
@@ -80,7 +81,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toEndOf="@+id/switch_txt"
-        app:layout_constraintTop_toBottomOf="@+id/upload_count" />
+        app:layout_constraintTop_toBottomOf="@+id/file_size_spinner" />
 
     <EditText
         android:id="@+id/slice_size"
@@ -93,7 +94,7 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/switch_part"
-        app:layout_constraintTop_toBottomOf="@+id/upload_count" />
+        app:layout_constraintTop_toBottomOf="@+id/file_size_spinner" />
 
     <Button
         android:id="@+id/video_upload"

@@ -144,7 +144,8 @@ public class MainActivity2 extends AppCompatActivity {
         conf.setConnectionTimeout(15 * 1000); // 连接超时，默认15秒
         conf.setSocketTimeout(15 * 1000); // socket超时，默认15秒
         conf.setMaxConcurrentRequest(5); // 最大并发请求书，默认5个
-        conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
+//        conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
+//        conf.setHttpProtocol(ClientConfiguration.getDefaultConf().getHttpProtocol());//默认是https
         OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
         OSSLog.enableLog();
         return new MyOssService(oss, bucket);
