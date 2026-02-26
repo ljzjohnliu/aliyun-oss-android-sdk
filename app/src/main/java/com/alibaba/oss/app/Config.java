@@ -23,8 +23,8 @@ public class Config {
     public static final String STS_SERVER_URL = "http://*.*.*.*:*/sts/getsts";//STS 地址
 
     public static final String BUCKET_NAME = "vne-vodimagex-uploadtest";
-    public static final String OSS_ACCESS_KEY_ID = "******";
-    public static final String OSS_ACCESS_KEY_SECRET = "********";
+    public static final String OSS_ACCESS_KEY_ID = "LTAI5tDv4LzPmqpvxaZuGdbi";
+    public static final String OSS_ACCESS_KEY_SECRET = "cXjlDfnqHhIhFAux294tCNyzWsENsU";
 
     public static final int DOWNLOAD_SUC = 1;
     public static final int DOWNLOAD_Fail = 2;
